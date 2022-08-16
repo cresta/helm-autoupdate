@@ -52,7 +52,9 @@ func (s *s3Getter) Get(URL string, _ ...getter.Option) (*bytes.Buffer, error) {
 }
 
 func NewS3Getter(_ []getter.Option) (getter.Getter, error) {
-	ses, err := session.NewSession()
+	ses, err := session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("unable to get s3 session: %w", err)
 	}
