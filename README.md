@@ -35,7 +35,10 @@ This is fine, but how do you know when to update the helm release to a newer ver
 But in this case, you don't have any git tracking of what version was released.  What you really want is some automation
 that will bump the `version` field when a new helm chart is released.  This is what `helm-autoupdate` is for.
 
+# Usage
+
 First, add a file named `.helm-autoupdate.yaml` in the root of your repository.  Add a `chart` item for each chart you want to update.
+The field "filename_regex" is an optional list of whitelisted filenames.  If you don't specify it, all files will be considered.
 
 ```yaml
 charts:
@@ -48,7 +51,7 @@ filename_regex:
 - .*\.yaml
 ```
 
-Next, change the `version` line to include the YAML comment `#helm:autoupdate:<IDENTITY>` where `<IDENTITY>` is the value
+Next, change the `version` line to include the YAML comment `# helm:autoupdate:<IDENTITY>` where `<IDENTITY>` is the value
 of the `charts[].identity` field.  For example, the original file now becomes
 
 ```yaml
@@ -65,7 +68,7 @@ spec:
         name: aws
       version: 0.0.1 # helm:autoupdate:aws-vpc-cni
   interval: 1m0s
-  timeout: 10
+  timeout: 10m
   values:
     replicaCount: 1
 ```
@@ -113,6 +116,10 @@ jobs:
 ```
 
 You can combine this with GitHub's auto-merge feature and status checks to complete the auto merge.
+
+# Supported helm backends
+
+This project comes with support for HTTPS, OCI, and [S3](./internal/helm/s3.go) backends.
 
 # Usage
 
