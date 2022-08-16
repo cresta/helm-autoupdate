@@ -3,7 +3,6 @@ package helm
 import (
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -14,11 +13,11 @@ import (
 // Autochange is a Helm plugin that automatically changes the chart version.
 // Example:
 // charts:
-// - identity: datadog
+//   - identity: datadog
 //     chart:
-//       repository: s3://cresta-helm-charts-v2/monorepo/cresta-datadog
-//       name: cresta-datadog
-//       version: "*"
+//     repository: s3://cresta-helm-charts-v2/monorepo/cresta-datadog
+//     name: cresta-datadog
+//     version: "*"
 type Autochange struct {
 	Charts        []AutoUpdateCharts `json:"charts"`
 	FilenameRegex []string           `json:"filename_regex,omitempty"`
@@ -47,7 +46,8 @@ func CheckForUpdate(il IndexLoader, desc *AutoUpdateChart, request *Update) (*Up
 		return nil, nil
 	}
 	ret := *request
-	ret.Parse = &(*request.Parse)
+	tmpParse := *request.Parse
+	ret.Parse = &tmpParse
 	ret.Parse.CurrentVersion = cv.Version
 	return &ret, nil
 }
@@ -73,7 +73,7 @@ type DirectorySearchForChanges struct {
 
 func WriteChangesToFilesystem(files []*ParsedFile) error {
 	for _, file := range files {
-		if err := ioutil.WriteFile(file.OriginalFilename, file.Bytes(), file.OriginalPermissions); err != nil {
+		if err := os.WriteFile(file.OriginalFilename, file.Bytes(), file.OriginalPermissions); err != nil {
 			return fmt.Errorf("failed to write %s: %w", file.OriginalFilename, err)
 		}
 	}
@@ -121,6 +121,9 @@ func PathToLoad(pathRegex []*regexp.Regexp, path string) bool {
 func (r *DirectorySearchForChanges) FindRequestedChanges(regexPathFilters []*regexp.Regexp) ([]*ParsedFile, error) {
 	var ret []*ParsedFile
 	if err := filepath.WalkDir(r.Dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
 		stat, err := os.Stat(path)
 		if err != nil {
 			return fmt.Errorf("unable to stat path %s: %w", path, err)
@@ -161,7 +164,7 @@ func Load(data []byte) (*Autochange, error) {
 }
 
 func LoadFile(path string) (*Autochange, error) {
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read %s: %w", path, err)
 	}
@@ -197,7 +200,7 @@ func (p *ParsedFile) ApplyUpdate(update *Update) {
 }
 
 func ParseFile(name string) (*ParsedFile, error) {
-	content, err := ioutil.ReadFile(name)
+	content, err := os.ReadFile(name)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read %s: %w", name, err)
 	}
