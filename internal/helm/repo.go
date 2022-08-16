@@ -46,6 +46,9 @@ func (r *DirectLoader) LoadIndexFile(URL string) (*repo.IndexFile, error) {
 	}
 	indexURL := URL + "/index.yaml"
 	content, err := client.Get(indexURL, getter.WithURL(indexURL))
+	if err != nil {
+		return nil, fmt.Errorf("could not fetch index file for %s: %s", URL, err)
+	}
 	if content == nil {
 		return nil, fmt.Errorf("no content for %s", indexURL)
 	}

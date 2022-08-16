@@ -2,7 +2,6 @@ package helm
 
 import (
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sigs.k8s.io/yaml"
@@ -63,7 +62,7 @@ func TestParseContent(t *testing.T) {
 }
 
 func TestParseFile(t *testing.T) {
-	f, err := ioutil.TempFile("", "TestParseFile")
+	f, err := os.CreateTemp("", "TestParseFile")
 	require.NoError(t, err)
 	defer func(name string) {
 		err := os.Remove(name)
@@ -71,7 +70,7 @@ func TestParseFile(t *testing.T) {
 			panic(err)
 		}
 	}(f.Name())
-	require.NoError(t, ioutil.WriteFile(f.Name(), []byte(cniFile), 0600))
+	require.NoError(t, os.WriteFile(f.Name(), []byte(cniFile), 0600))
 	pf, err := ParseFile(f.Name())
 	require.NoError(t, err)
 	cniFileMatchesExpected(t, pf)
@@ -107,14 +106,15 @@ filename_regex:
 `
 
 func TestLoadFile(t *testing.T) {
-	f, err := ioutil.TempFile("", "TestLoadFile")
+	f, err := os.CreateTemp("", "TestLoadFile")
+	require.NoError(t, err)
 	defer func(name string) {
 		err := os.Remove(name)
 		if err != nil {
 			panic(err)
 		}
 	}(f.Name())
-	require.NoError(t, ioutil.WriteFile(f.Name(), []byte(testConfig), 0600))
+	require.NoError(t, os.WriteFile(f.Name(), []byte(testConfig), 0600))
 	ac, err := LoadFile(f.Name())
 	require.NoError(t, err)
 	b, err := yaml.Marshal(ac)
@@ -123,11 +123,11 @@ func TestLoadFile(t *testing.T) {
 }
 
 func generateExample(t *testing.T) (string, func()) {
-	dirName, err := ioutil.TempDir("", "generateExample")
+	dirName, err := os.MkdirTemp("", "generateExample")
 	require.NoError(t, err)
-	require.NoError(t, ioutil.WriteFile(filepath.Join(dirName, ".helm-autoupdate.yaml"), []byte(testConfig), 0600))
-	require.NoError(t, ioutil.WriteFile(filepath.Join(dirName, "aws-vpc-cni.yaml"), []byte(cniFile), 0600))
-	require.NoError(t, ioutil.WriteFile(filepath.Join(dirName, "test-example.yaml"), []byte(`name: jack`), 0600))
+	require.NoError(t, os.WriteFile(filepath.Join(dirName, ".helm-autoupdate.yaml"), []byte(testConfig), 0600))
+	require.NoError(t, os.WriteFile(filepath.Join(dirName, "aws-vpc-cni.yaml"), []byte(cniFile), 0600))
+	require.NoError(t, os.WriteFile(filepath.Join(dirName, "test-example.yaml"), []byte(`name: jack`), 0600))
 	return dirName, func() {
 		err := os.RemoveAll(dirName)
 		if err != nil {
@@ -160,7 +160,7 @@ func TestWriteChangesToFilesystem(t *testing.T) {
 	ru.Parse.CurrentVersion = "99.99.99"
 	changeFiles[0].ApplyUpdate(&ru)
 	require.NoError(t, WriteChangesToFilesystem(changeFiles))
-	b, err := ioutil.ReadFile(filepath.Join(dirName, "aws-vpc-cni.yaml"))
+	b, err := os.ReadFile(filepath.Join(dirName, "aws-vpc-cni.yaml"))
 	require.NoError(t, err)
 	require.Contains(t, string(b), "      version: 99.99.99 # helm:autoupdate:aws-vpc-cni")
 }
@@ -203,7 +203,7 @@ func TestApplyUpdatesToFiles(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, updatedFiles, 1)
 	require.NoError(t, WriteChangesToFilesystem(updatedFiles))
-	b, err := ioutil.ReadFile(filepath.Join(dirName, "aws-vpc-cni.yaml"))
+	b, err := os.ReadFile(filepath.Join(dirName, "aws-vpc-cni.yaml"))
 	require.NoError(t, err)
 	require.Contains(t, string(b), "      version: 1.0.5 # helm:autoupdate:aws-vpc-cni")
 }
