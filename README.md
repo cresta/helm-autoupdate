@@ -168,7 +168,7 @@ jobs:
           else
             echo '::set-output name=CHANGES::false'
           fi
-      # Create the pull request
+      # Create the pull request (notice the if statement)
       - name: Create PR to terraform repo
         uses: peter-evans/create-pull-request@v3
         id: cpr
@@ -183,7 +183,7 @@ jobs:
           body: "A forced auto update of helm versions"
           commit-message: "A forced auto update of helm versions"
       # Enable auto merge on the PR.  This part requires the generated token above
-      - name: Enable Pull Request Automerge
+      - name: Enable Pull Request Auto Merge
         if: steps.cpr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v2
         with:
