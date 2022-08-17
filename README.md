@@ -169,7 +169,7 @@ jobs:
             echo '::set-output name=CHANGES::false'
           fi
       # Create the pull request (notice the if statement)
-      - name: Create PR to terraform repo
+      - name: Create PR to flux2 repo
         uses: peter-evans/create-pull-request@v3
         id: cpr
         if: steps.changes.outputs.CHANGES == 'true'
