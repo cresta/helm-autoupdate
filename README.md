@@ -235,4 +235,4 @@ jobs:
 
 # Usage
 
-For a simple example, see the workflow file in [helm-autoupdate-testing](https://github.com/cresta/helm-autoupdate-testing/blob/main/.github/workflows/update-helm-versions.yaml)
+For a simple example, see the workflow file in [helm-autoupdate-testing](https://github.com/cresta/helm-autoupdate-testing/blob/main/.github/workflows/update-helm-versions.yaml).  You can see a created PR [here](https://github.com/cresta/helm-autoupdate-testing/pull/2).
