@@ -1,6 +1,9 @@
 # action.yml
 name: 'Helm Autoupdate'
 description: 'Uses a helm autoupdate file to modify the current directory'
+branding:
+  icon: 'activity'
+  color: 'blue'
 runs:
   using: 'docker'
   image: 'Dockerfile'
