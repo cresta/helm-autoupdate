@@ -3,11 +3,12 @@ package helm
 import (
 	"bytes"
 	"fmt"
+	"net/url"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"helm.sh/helm/v3/pkg/getter"
-	"net/url"
 )
-import "github.com/aws/aws-sdk-go/aws/session"
 
 func S3Provider() getter.Provider {
 	return getter.Provider{
@@ -22,10 +23,10 @@ type s3Getter struct {
 	s3Client *s3.S3
 }
 
-func (s *s3Getter) Get(URL string, _ ...getter.Option) (*bytes.Buffer, error) {
-	u, err := url.Parse(URL)
+func (s *s3Getter) Get(s3Url string, _ ...getter.Option) (*bytes.Buffer, error) {
+	u, err := url.Parse(s3Url)
 	if err != nil {
-		return nil, fmt.Errorf("invalid s3 URL format: %s", URL)
+		return nil, fmt.Errorf("invalid s3 s3Url format: %s", s3Url)
 	}
 	bucket := u.Host
 	key := u.Path

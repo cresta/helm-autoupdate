@@ -1,12 +1,14 @@
-package helm
+package helm_test
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/cresta/helm-autoupdate/internal/helm"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLoadRepo(t *testing.T) {
-	var l DirectLoader
+	var l helm.DirectLoader
 	indexFile, err := l.LoadIndexFile("https://aws.github.io/eks-charts")
 	require.NoError(t, err)
 	require.NotNil(t, indexFile)
