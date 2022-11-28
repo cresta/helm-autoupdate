@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sigs.k8s.io/yaml"
 	"strings"
+
+	"sigs.k8s.io/yaml"
 )
 
 // Autochange is a Helm plugin that automatically changes the chart version.
@@ -85,6 +86,7 @@ func ApplyUpdatesToFiles(il IndexLoader, config *Autochange, files []*ParsedFile
 	for _, file := range files {
 		hasModification := false
 		for _, update := range file.RequestedUpdates {
+			update := update
 			uc := config.findUpdateChartForUpdate(&update)
 			if uc == nil {
 				continue
@@ -242,8 +244,8 @@ type LineParse struct {
 	Suffix         string
 }
 
-func (L *LineParse) String() string {
-	return fmt.Sprintf("%s: %s # helm:autoupdate:%s%s", L.Prefix, L.CurrentVersion, L.Identity, L.Suffix)
+func (l *LineParse) String() string {
+	return fmt.Sprintf("%s: %s # helm:autoupdate:%s%s", l.Prefix, l.CurrentVersion, l.Identity, l.Suffix)
 }
 
 func ParseLine(line string) *LineParse {

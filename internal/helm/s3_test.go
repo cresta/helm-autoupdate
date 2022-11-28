@@ -1,13 +1,15 @@
-package helm
+package helm_test
 
 import (
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
+
+	"github.com/cresta/helm-autoupdate/internal/helm"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLoadS3(t *testing.T) {
-	var l DirectLoader
+	var l helm.DirectLoader
 	s3Repo := os.Getenv("S3_REPO")
 	if s3Repo == "" {
 		t.Skip("S3_REPO is not set")

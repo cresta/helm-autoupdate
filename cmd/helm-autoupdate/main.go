@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/cresta/helm-autoupdate/internal/helm"
 	"os"
+
+	"github.com/cresta/helm-autoupdate/internal/helm"
 )
 
 func main() {

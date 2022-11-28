@@ -1,11 +1,12 @@
 package helm
 
 import (
-	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
-	"sigs.k8s.io/yaml"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"sigs.k8s.io/yaml"
 )
 
 func TestParseLine(t *testing.T) {
@@ -18,11 +19,11 @@ func TestParseLine(t *testing.T) {
 	}, ParseLine("  version: 0.3.6 # helm:autoupdate:datadog"))
 }
 
-func TestParseLine_String(T *testing.T) {
-	require.Equal(T, "  version: 0.3.6 # helm:autoupdate:datadog", ParseLine("  version: 0.3.6 # helm:autoupdate:datadog").String())
+func TestParseLine_String(t *testing.T) {
+	require.Equal(t, "  version: 0.3.6 # helm:autoupdate:datadog", ParseLine("  version: 0.3.6 # helm:autoupdate:datadog").String())
 }
 
-const cniFile = `apiVersion: helm.toolkit.fluxcd.io/v2beta1
+const cniFile = `apiVersion: toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: aws-vpc-cni
@@ -41,6 +42,7 @@ spec:
 `
 
 func cniFileMatchesExpected(t *testing.T, pf *ParsedFile) {
+	t.Helper()
 	require.Equal(t, cniFile, pf.OriginalContent)
 	require.Equal(t, "  chart:", pf.Lines[5])
 	require.Equal(t, []Update{
@@ -98,7 +100,7 @@ const testConfig = `charts:
   identity: aws-vpc-cni
 - chart:
     name: datadog
-    repository: https://helm.datadoghq.com
+    repository: https://datadoghq.com
     version: 1.0.0
   identity: datadog
 filename_regex:
@@ -123,6 +125,7 @@ func TestLoadFile(t *testing.T) {
 }
 
 func generateExample(t *testing.T) (string, func()) {
+	t.Helper()
 	dirName, err := os.MkdirTemp("", "generateExample")
 	require.NoError(t, err)
 	require.NoError(t, os.WriteFile(filepath.Join(dirName, ".helm-autoupdate.yaml"), []byte(testConfig), 0600))

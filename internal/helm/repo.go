@@ -2,12 +2,13 @@ package helm
 
 import (
 	"fmt"
+	"net/url"
+	"sync"
+
 	"helm.sh/helm/v3/pkg/cli"
 	"helm.sh/helm/v3/pkg/getter"
 	"helm.sh/helm/v3/pkg/repo"
-	"net/url"
 	"sigs.k8s.io/yaml"
-	"sync"
 )
 
 type IndexLoader interface {
@@ -34,20 +35,20 @@ type DirectLoader struct {
 	DefaultProviders
 }
 
-func (r *DirectLoader) LoadIndexFile(URL string) (*repo.IndexFile, error) {
-	u, err := url.Parse(URL)
+func (r *DirectLoader) LoadIndexFile(baseURL string) (*repo.IndexFile, error) {
+	u, err := url.Parse(baseURL)
 	if err != nil {
-		return nil, fmt.Errorf("invalid chart URL format: %s", URL)
+		return nil, fmt.Errorf("invalid chart baseURL format: %s", baseURL)
 	}
 
 	client, err := r.getProviders().ByScheme(u.Scheme)
 	if err != nil {
 		return nil, fmt.Errorf("could not find protocol handler for: %s", u.Scheme)
 	}
-	indexURL := URL + "/index.yaml"
+	indexURL := baseURL + "/index.yaml"
 	content, err := client.Get(indexURL, getter.WithURL(indexURL))
 	if err != nil {
-		return nil, fmt.Errorf("could not fetch index file for %s: %s", URL, err)
+		return nil, fmt.Errorf("could not fetch index file for %s: %w", baseURL, err)
 	}
 	if content == nil {
 		return nil, fmt.Errorf("no content for %s", indexURL)
@@ -65,20 +66,20 @@ type CachedLoader struct {
 	mu          sync.Mutex
 }
 
-func (r *CachedLoader) LoadIndexFile(URL string) (*repo.IndexFile, error) {
+func (r *CachedLoader) LoadIndexFile(indexURL string) (*repo.IndexFile, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.cache == nil {
 		r.cache = make(map[string]*repo.IndexFile)
 	}
-	if indexFile, ok := r.cache[URL]; ok {
+	if indexFile, ok := r.cache[indexURL]; ok {
 		return indexFile, nil
 	}
-	indexFile, err := r.IndexLoader.LoadIndexFile(URL)
+	indexFile, err := r.IndexLoader.LoadIndexFile(indexURL)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to load index file for %s: %w", indexURL, err)
 	}
-	r.cache[URL] = indexFile
+	r.cache[indexURL] = indexFile
 	return indexFile, nil
 }
 
