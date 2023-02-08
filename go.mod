@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/aws/aws-sdk-go v1.44.196
 	github.com/stretchr/testify v1.8.1
-	helm.sh/helm/v3 v3.11.0
+	helm.sh/helm/v3 v3.11.1
 	sigs.k8s.io/yaml v1.3.0
 )
 
