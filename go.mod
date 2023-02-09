@@ -3,7 +3,7 @@ module github.com/cresta/helm-autoupdate
 go 1.20
 
 require (
-	github.com/aws/aws-sdk-go v1.44.197
+	github.com/aws/aws-sdk-go v1.44.198
 	github.com/stretchr/testify v1.8.1
 	helm.sh/helm/v3 v3.11.1
 	sigs.k8s.io/yaml v1.3.0
