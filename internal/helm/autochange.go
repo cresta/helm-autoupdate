@@ -41,7 +41,7 @@ func CheckForUpdate(il IndexLoader, desc *AutoUpdateChart, request *Update) (*Up
 	}
 	cv, err := indexFile.Get(desc.Name, desc.Version)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get version: %w", err)
+		return nil, fmt.Errorf("failed to get version for chart %s: %w", desc.Name, err)
 	}
 	if strings.TrimSpace(cv.Version) == strings.TrimSpace(request.Parse.CurrentVersion) {
 		return nil, nil
