@@ -82,7 +82,3 @@ func (r *CachedLoader) LoadIndexFile(indexURL string) (*repo.IndexFile, error) {
 	r.cache[indexURL] = indexFile
 	return indexFile, nil
 }
-
-func ApplyToUpdate(r IndexLoader, update *Update) {
-
-}
