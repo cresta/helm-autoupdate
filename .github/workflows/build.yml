@@ -34,7 +34,7 @@ jobs:
       - name: Test # Run the tests
         run: go test -v ./...
       - name: Login to GitHub Container Registry # Required for pushing to ghcr.io
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
