@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.46.3
 	github.com/stretchr/testify v1.8.4
 	helm.sh/helm/v3 v3.13.1
-	sigs.k8s.io/yaml v1.3.0
+	sigs.k8s.io/yaml v1.4.0
 )
 
 require (
