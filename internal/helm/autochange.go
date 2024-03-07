@@ -122,7 +122,7 @@ func PathToLoad(pathRegex []*regexp.Regexp, path string) bool {
 
 func (r *DirectorySearchForChanges) FindRequestedChanges(regexPathFilters []*regexp.Regexp) ([]*ParsedFile, error) {
 	var ret []*ParsedFile
-	if err := filepath.WalkDir(r.Dir, func(path string, d fs.DirEntry, err error) error {
+	if err := filepath.WalkDir(r.Dir, func(path string, _ fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
