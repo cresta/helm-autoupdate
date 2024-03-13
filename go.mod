@@ -7,7 +7,7 @@ toolchain go1.21.6
 require (
 	github.com/aws/aws-sdk-go v1.50.38
 	github.com/stretchr/testify v1.9.0
-	helm.sh/helm/v3 v3.14.2
+	helm.sh/helm/v3 v3.14.3
 	sigs.k8s.io/yaml v1.4.0
 )
 
@@ -18,7 +18,7 @@ require (
 	github.com/Microsoft/hcsshim v0.11.4 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/containerd/containerd v1.7.11 // indirect
+	github.com/containerd/containerd v1.7.12 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/docker/cli v24.0.6+incompatible // indirect
