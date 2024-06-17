@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.22.4
 
 require (
-	github.com/aws/aws-sdk-go v1.54.2
+	github.com/aws/aws-sdk-go v1.54.3
 	github.com/stretchr/testify v1.9.0
 	helm.sh/helm/v3 v3.15.2
 	sigs.k8s.io/yaml v1.4.0
