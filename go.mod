@@ -2,7 +2,7 @@ module github.com/cresta/helm-autoupdate
 
 go 1.22.0
 
-toolchain go1.22.4
+toolchain go1.22.5
 
 require (
 	github.com/aws/aws-sdk-go v1.54.13
