@@ -50,7 +50,7 @@ jobs:
             type=match,pattern=v(.*),group=1
             type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push # Build/push docker image for use in this action
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.ref == 'refs/heads/main' || github.ref_type == 'tag' }}
