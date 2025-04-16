@@ -1,6 +1,3 @@
-run:
-  deadline: 3m
-
 linters:
   disable-all: true
   enable:
@@ -20,9 +17,7 @@ linters:
   - errchkjson
   - errname
   - errorlint
-  - execinquery
   - exhaustive
-  - exportloopref
   - forcetypeassert
   - funlen
   - gochecknoglobals
@@ -36,7 +31,6 @@ linters:
   - gofmt
   - goheader
   - goimports
-  - gomnd
   - gomoddirectives
   - gomodguard
   - goprintffuncname
@@ -65,7 +59,6 @@ linters:
   - revive
   - staticcheck
   - stylecheck
-  - tenv
   - testableexamples
   - thelper
   - tparallel
