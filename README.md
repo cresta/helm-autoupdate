@@ -1,3 +1,7 @@
+> [!CAUTION]
+> This repository is archived. Helm image updates now happen via mirroring third-party charts: https://github.com/cresta/third-party-mirror
+> Relevant documentation can be found here: https://docs.superhuman.com/d/Infrastructure_dboaRXZbw4w/Images-in-Elastic-Container-Registry-ECR_suqd93Xb
+
 # helm-autoupdate
 
 CLI/action to update helm versions in git repositories
